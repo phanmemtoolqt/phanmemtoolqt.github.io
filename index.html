@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="vi">
+<!DOCTYPE html><html lang="vi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -31,7 +30,7 @@
     button:hover {
       background-color: #019875;
     }
-    .flashBox {
+    #flashBox {
       margin-top: 20px;
       padding: 15px;
       font-weight: bold;
@@ -59,22 +58,15 @@
     <input id="username" type="text" placeholder="Tên đăng nhập" /><br/>
     <input id="key" type="text" placeholder="Mã truy cập" /><br/>
     <button onclick="login()">Đăng nhập</button>
-    <div class="flashBox" id="flashBoxLogin">Tool đang theo dõi phiên...</div>
-  </div>
-
-  <div class="container" id="linkPage" style="display:none;">
+    <div id="flashBox">liên hệ Adm @toolquocthinh</div>
+  </div>  <div class="container" id="linkPage" style="display:none;">
     <h2>Nhập link game</h2>
     <input id="gameLink" type="text" placeholder="Dán link game vào đây"/><br/>
     <button onclick="startGame()">Bắt đầu</button>
-    <div class="flashBox" id="flashBoxLink">Tool đang theo dõi phiên...</div>
-  </div>
-
-  <div id="gamePage" style="display:none;">
+  </div>  <div id="gamePage" style="display:none;">
     <iframe id="gameFrame"></iframe>
-    <div class="flashBox" id="flashBoxGame">Tool đang theo dõi phiên...</div>
-  </div>
-
-  <script>
+    <div id="flashBox">Tool đang theo dõi phiên...</div>
+  </div>  <script>
     const KEY_URL = "https://raw.githubusercontent.com/phanmemtoolqt/key-manager/main/keys.json";
     let accountList = {};
 
@@ -93,7 +85,7 @@
       const deviceId = getDeviceId();
 
       try {
-        const res = await fetch(KEY_URL + "?v=" + Date.now()); // chống cache
+        const res = await fetch(KEY_URL + "?v=" + Date.now());
         accountList = await res.json();
       } catch (e) {
         alert("Không thể tải danh sách key.");
@@ -113,14 +105,10 @@
 
       if (!account.device) {
         account.device = deviceId;
-        // lưu lại thông tin thiết bị (nếu cần, có thể call API update ở đây)
       }
-
-      localStorage.setItem("currentUser", username); // lưu user để check lại nếu cần
 
       document.getElementById("loginPage").style.display = "none";
       document.getElementById("linkPage").style.display = "block";
-      startFlashTimer("flashBoxLink");
     }
 
     function startGame() {
@@ -133,24 +121,23 @@
       document.getElementById("linkPage").style.display = "none";
       document.getElementById("gamePage").style.display = "block";
       document.getElementById("gameFrame").src = link;
-      startFlashTimer("flashBoxGame");
+      startFlashTimer();
     }
 
-    function startFlashTimer(boxId) {
+    function startFlashTimer() {
       setInterval(() => {
         const now = new Date();
         const second = now.getSeconds();
-        const flashBox = document.getElementById(boxId);
+        const flashBox = document.getElementById("flashBox");
 
         if (second >= 40 && second < 46) {
           flashBox.classList.add("flash");
           flashBox.innerText = "Tool đang nháy (giây " + second + ")";
         } else {
           flashBox.classList.remove("flash");
-          flashBox.innerText = "t.me/Toolquocthinh";
+          flashBox.innerText = "Tool đang theo dõi phiên...";
         }
       }, 1000);
     }
-  </script>
-</body>
+  </script></body>
 </html>

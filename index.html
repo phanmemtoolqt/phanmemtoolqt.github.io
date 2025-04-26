@@ -2,117 +2,114 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QUỐC THỊNH - Nơi gửi trọn niềm tin</title>
     <style>
         body {
             margin: 0;
+            background: #000;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #ffffff, #e0e0e0);
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-        .container {
-            flex: 1;
+            color: #fff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
+            height: 100vh;
         }
-        .input-container {
+        #input-section, #flash-section {
+            background: #111;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px #0f0;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            width: 100%;
+            width: 90%;
             max-width: 400px;
-            margin-bottom: 30px;
         }
-        .input-container input {
+        input {
             padding: 10px;
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            background: #000;
+            color: #0f0;
             font-size: 16px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            outline: none;
         }
-        .input-container button {
-            padding: 12px;
-            font-size: 18px;
-            background-color: #28a745;
-            color: white;
+        button {
+            padding: 10px;
+            background: #0f0;
             border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .input-container button:hover {
-            background-color: #218838;
-        }
-        .flash-container {
-            display: none;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            margin-top: 30px;
-        }
-        .box {
-            width: 120px;
-            height: 120px;
-            border-radius: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            color: white;
+            border-radius: 8px;
             font-weight: bold;
-            transition: background 0.3s, transform 0.3s;
-        }
-        .red {
-            background-color: #dc3545;
-        }
-        .green {
-            background-color: #28a745;
-        }
-        .flash {
-            transform: scale(1.2);
-            box-shadow: 0 0 25px rgba(0,0,0,0.5);
-        }
-        footer {
-            text-align: center;
             font-size: 16px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-top: 1px solid #ccc;
+            cursor: pointer;
         }
-        footer span {
-            color: #ff0000;
+        #flash-section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        #flash-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #333;
+            padding: 20px;
+            border-radius: 20px;
+            gap: 40px;
+            position: relative;
+        }
+        .side {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: grey;
+            transition: background 0.2s;
+        }
+        #dice {
+            width: 50px;
+        }
+        .title {
+            font-size: 24px;
             font-weight: bold;
+            color: #0f0;
+        }
+        .label {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="input-container" id="input-section">
-        <input type="text" id="username" placeholder="Tên đăng nhập">
-        <input type="password" id="key" placeholder="Mã truy cập">
-        <input type="text" id="gameLink" placeholder="Link game bất kỳ">
-        <button onclick="enterGame()">Vào Tool</button>
-    </div>
+<div id="input-section">
+    <div class="title">QUỐC THỊNH</div>
+    <div style="text-align:center; margin-bottom: 10px;">Nơi gửi trọn niềm tin</div>
+    <input id="username" placeholder="Tên đăng nhập" />
+    <input id="key" placeholder="Mã truy cập" />
+    <input id="gameLink" placeholder="Link game" />
+    <button onclick="enterGame()">Đăng nhập</button>
+    <div style="text-align:center; font-size: 14px; color: gray;">@toolquocthinh</div>
+</div>
 
-    <div class="flash-container" id="flash-section">
-        <div class="box red" id="red-box">Tài</div>
-        <div class="box green" id="green-box">Xỉu</div>
+<div id="flash-section">
+    <div id="flash-box">
+        <div>
+            <div id="tai" class="side"></div>
+            <div class="label">Tài</div>
+        </div>
+        <img id="dice" src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Alea_1.png" />
+        <div>
+            <div id="xiu" class="side"></div>
+            <div class="label">Xỉu</div>
+        </div>
     </div>
 </div>
 
-<footer>Liên hệ hỗ trợ: <span>@toolquocthinh</span></footer>
-
 <script>
-    let flashActive = false;
-    let interval;
+    let flashInterval;
 
     function enterGame() {
         const username = document.getElementById('username').value.trim();
@@ -125,51 +122,38 @@
         }
 
         if (key !== '3102011') {
-            alert('Mã truy cập không đúng!');
+            alert('Mã truy cập sai!');
             return;
         }
 
-        // Chuyển giao diện
+        window.open(gameLink, '_blank'); // Mở link game riêng
         document.getElementById('input-section').style.display = 'none';
         document.getElementById('flash-section').style.display = 'flex';
 
-        // Bắt đầu nháy đèn
         startFlashing();
     }
 
     function startFlashing() {
-        interval = setInterval(() => {
+        flashInterval = setInterval(() => {
             const now = new Date();
             const seconds = now.getSeconds();
 
-            if (seconds >= 40 && seconds <= 46) { // nháy trong 7s
-                if (!flashActive) {
-                    flashActive = true;
-                    flash();
+            if (seconds >= 40 && seconds <= 47) {
+                // Random chọn nháy bên nào
+                const randomSide = Math.random() > 0.5 ? 'tai' : 'xiu';
+                if (randomSide === 'tai') {
+                    document.getElementById('tai').style.background = 'lime';
+                    document.getElementById('xiu').style.background = 'grey';
+                } else {
+                    document.getElementById('xiu').style.background = 'red';
+                    document.getElementById('tai').style.background = 'grey';
                 }
             } else {
-                flashActive = false;
-                resetFlash();
+                // Ngoài thời gian nháy thì về màu xám
+                document.getElementById('tai').style.background = 'grey';
+                document.getElementById('xiu').style.background = 'grey';
             }
-        }, 1000);
-    }
-
-    function flash() {
-        // Random tài hoặc xỉu nháy
-        const flashTài = Math.random() < 0.5;
-
-        if (flashTài) {
-            document.getElementById('red-box').classList.add('flash');
-            document.getElementById('green-box').classList.remove('flash');
-        } else {
-            document.getElementById('green-box').classList.add('flash');
-            document.getElementById('red-box').classList.remove('flash');
-        }
-    }
-
-    function resetFlash() {
-        document.getElementById('red-box').classList.remove('flash');
-        document.getElementById('green-box').classList.remove('flash');
+        }, 500); // kiểm tra mỗi 0.5s cho nhạy
     }
 </script>
 

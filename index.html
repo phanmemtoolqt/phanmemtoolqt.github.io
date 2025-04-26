@@ -31,7 +31,7 @@
     button:hover {
       background-color: #019875;
     }
-    #flashBox {
+    .flashBox {
       margin-top: 20px;
       padding: 15px;
       font-weight: bold;
@@ -59,22 +59,23 @@
     <input id="username" type="text" placeholder="Tên đăng nhập" /><br/>
     <input id="key" type="text" placeholder="Mã truy cập" /><br/>
     <button onclick="login()">Đăng nhập</button>
-    <div id="flashBox">Tool đang theo dõi phiên...</div>
+    <div class="flashBox" id="flashBoxLogin">Tool đang theo dõi phiên...</div>
   </div>
 
   <div class="container" id="linkPage" style="display:none;">
     <h2>Nhập link game</h2>
     <input id="gameLink" type="text" placeholder="Dán link game vào đây"/><br/>
     <button onclick="startGame()">Bắt đầu</button>
+    <div class="flashBox" id="flashBoxLink">Tool đang theo dõi phiên...</div>
   </div>
 
   <div id="gamePage" style="display:none;">
     <iframe id="gameFrame"></iframe>
-    <div id="flashBox">Tool đang theo dõi phiên...</div>
+    <div class="flashBox" id="flashBoxGame">Tool đang theo dõi phiên...</div>
   </div>
 
   <script>
-    const KEY_URL = "https://phanmemtoolqt.github.io/key-manager/keys.json";
+    const KEY_URL = "https://raw.githubusercontent.com/phanmemtoolqt/key-manager/main/keys.json";
     let accountList = {};
 
     function getDeviceId() {
@@ -92,7 +93,7 @@
       const deviceId = getDeviceId();
 
       try {
-        const res = await fetch(KEY_URL + "?v=" + Date.now()); // Chống cache
+        const res = await fetch(KEY_URL + "?v=" + Date.now()); // chống cache
         accountList = await res.json();
       } catch (e) {
         alert("Không thể tải danh sách key.");
@@ -112,10 +113,14 @@
 
       if (!account.device) {
         account.device = deviceId;
+        // lưu lại thông tin thiết bị (nếu cần, có thể call API update ở đây)
       }
+
+      localStorage.setItem("currentUser", username); // lưu user để check lại nếu cần
 
       document.getElementById("loginPage").style.display = "none";
       document.getElementById("linkPage").style.display = "block";
+      startFlashTimer("flashBoxLink");
     }
 
     function startGame() {
@@ -128,14 +133,14 @@
       document.getElementById("linkPage").style.display = "none";
       document.getElementById("gamePage").style.display = "block";
       document.getElementById("gameFrame").src = link;
-      startFlashTimer();
+      startFlashTimer("flashBoxGame");
     }
 
-    function startFlashTimer() {
+    function startFlashTimer(boxId) {
       setInterval(() => {
         const now = new Date();
         const second = now.getSeconds();
-        const flashBox = document.getElementById("flashBox");
+        const flashBox = document.getElementById(boxId);
 
         if (second >= 40 && second < 46) {
           flashBox.classList.add("flash");

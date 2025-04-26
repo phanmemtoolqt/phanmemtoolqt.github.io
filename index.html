@@ -1,134 +1,139 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>QUỐC THỊNH - Nơi gửi trọn niềm tin</title>
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #1e3c72, #2a5298);
+      background-color: #121212;
       color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      transition: background-color 0.3s;
     }
     .container {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      width: 90%;
+      max-width: 400px;
+    }
+    h2 {
       text-align: center;
-      padding-top: 80px;
+      margin-bottom: 20px;
     }
     input, button {
+      width: 100%;
       padding: 12px;
-      margin: 8px;
-      font-size: 16px;
-      border-radius: 6px;
+      margin: 10px 0;
       border: none;
-      width: 80%;
-      max-width: 300px;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    input {
+      background: #333;
+      color: white;
     }
     button {
-      background-color: #00b894;
+      background: #4CAF50;
       color: white;
       cursor: pointer;
     }
     button:hover {
-      background-color: #019875;
+      background: #45a049;
     }
-    #flashBox {
-      margin-top: 20px;
-      padding: 15px;
-      font-weight: bold;
-      border-radius: 10px;
-      background-color: rgba(0,0,0,0.6);
-    }
-    .flash {
-      animation: flash 0.5s alternate infinite;
-      color: yellow;
-    }
-    @keyframes flash {
-      from { background-color: rgba(255, 0, 0, 0.6); }
-      to { background-color: rgba(255, 255, 0, 0.8); }
-    }
-    iframe {
-      width: 100%;
-      height: 90vh;
-      border: none;
+    .hidden {
+      display: none;
     }
   </style>
 </head>
+
 <body>
-  <div class="container" id="loginPage">
-    <h1>QUỐC THỊNH - Nơi gửi trọn niềm tin</h1>
-    <input id="username" type="text" placeholder="Tên đăng nhập"/><br/>
-    <input id="key" type="text" placeholder="Mã truy cập"/><br/>
-    <button onclick="login()">Đăng nhập</button>
-    <div id="flashBox">Liên hệ @toolquocthinh để nhận mã</div>
+  <div class="container" id="loginForm">
+    <h2>Đăng nhập Key</h2>
+    <input type="text" id="keyInput" placeholder="Nhập key">
+    <button onclick="checkKey()">Xác nhận</button>
   </div>
 
-  <div class="container" id="linkPage" style="display:none;">
-    <h2>Nhập link game</h2>
-    <input id="gameLink" type="text" placeholder="Dán link game vào đây"/><br/>
-    <button onclick="startGame()">Vào game</button>
-  </div>
-
-  <div id="gamePage" style="display:none;">
-    <iframe id="gameFrame"></iframe>
-    <div id="flashBox">Tool đang theo dõi phiên...</div>
+  <div class="container hidden" id="gameForm">
+    <h2>Nhập Link Game</h2>
+    <input type="text" id="gameLink" placeholder="Dán link game vào đây">
+    <button onclick="openGame()">Vào Game</button>
   </div>
 
   <script>
-    const KEY_URL = "https://raw.githubusercontent.com/phanmemtoolqt/key-manager/main/keys.json";
-
-    function getDeviceId() {
-      let id = localStorage.getItem("device_id");
-      if (!id) {
-        id = "device-" + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem("device_id", id);
-      }
-      return id;
-    }
-
-    async function login() {
-      const username = document.getElementById("username").value.trim();
-      const key = document.getElementById("key").value.trim();
-      const device = getDeviceId();
-
-      try {
-        const res = await fetch(KEY_URL + "?v=" + Date.now());
-        const list = await res.json();
-        const user = list[username];
-        if (!user || user.key !== key) throw "Sai thông tin!";
-        if (user.device && user.device !== device) throw "Tài khoản đã dùng ở thiết bị khác!";
-        document.getElementById("loginPage").style.display = "none";
-        document.getElementById("linkPage").style.display = "block";
-      } catch (err) {
-        alert(err);
-      }
-    }
-
-    function startGame() {
-      const link = document.getElementById("gameLink").value.trim();
-      if (!link.startsWith("http")) {
-        alert("Link không hợp lệ!");
+    async function checkKey() {
+      const key = document.getElementById('keyInput').value.trim();
+      if (!key) {
+        alert('Vui lòng nhập key');
         return;
       }
-      document.getElementById("linkPage").style.display = "none";
-      document.getElementById("gamePage").style.display = "block";
-      document.getElementById("gameFrame").src = link;
-      startFlash();
+
+      try {
+        const response = await fetch('https://phanmemtoolqt.github.io/keys.json');
+        const keys = await response.json();
+        const found = keys.find(k => k.key === key);
+
+        if (found) {
+          const expiry = found.expiry ? new Date(found.expiry) : null;
+          const today = new Date();
+
+          if (expiry && expiry < today) {
+            alert('Key đã hết hạn!');
+            return;
+          }
+
+          localStorage.setItem('validKey', key);
+          document.getElementById('loginForm').classList.add('hidden');
+          document.getElementById('gameForm').classList.remove('hidden');
+          startFlashing();
+        } else {
+          alert('Key không đúng!');
+        }
+      } catch (error) {
+        console.error('Lỗi khi kiểm tra key:', error);
+        alert('Lỗi kết nối!');
+      }
     }
 
-    function startFlash() {
-      setInterval(() => {
-        const now = new Date().getSeconds();
-        const box = document.getElementById("flashBox");
-        if (now >= 40 && now < 46) {
-          box.classList.add("flash");
-          box.innerText = "Tool đang nháy (giây " + now + ")";
-        } else {
-          box.classList.remove("flash");
-          box.innerText = "Tool đang theo dõi phiên...";
-        }
-      }, 1000);
+    function openGame() {
+      const link = document.getElementById('gameLink').value.trim();
+      if (link) {
+        window.location.href = link;
+      } else {
+        alert('Vui lòng nhập link game');
+      }
     }
+
+    function startFlashing() {
+      setInterval(() => {
+        const now = new Date();
+        const seconds = now.getSeconds();
+
+        if (seconds >= 40 && seconds <= 46) {
+          // Nháy đỏ và đen liên tục
+          document.body.style.backgroundColor = (seconds % 2 === 0) ? "#ff0000" : "#121212";
+        } else {
+          document.body.style.backgroundColor = "#121212"; // Mặc định nền đen
+        }
+      }, 500);
+    }
+
+    window.onload = () => {
+      const savedKey = localStorage.getItem('validKey');
+      if (savedKey) {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('gameForm').classList.remove('hidden');
+        startFlashing();
+      }
+    };
   </script>
 </body>
 </html>

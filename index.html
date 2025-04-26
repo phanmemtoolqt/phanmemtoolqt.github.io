@@ -1,148 +1,176 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>QUỐC THỊNH - Nơi gửi trọn niềm tin</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #000000, #121212);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: white;
-    }
-    .login-box {
-      background: #000;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 30px #00ffcc;
-      text-align: center;
-      width: 90%;
-      max-width: 400px;
-    }
-    .login-box h1 {
-      color: #00ffcc;
-      margin-bottom: 10px;
-      font-size: 28px;
-    }
-    .login-box p {
-      margin-bottom: 20px;
-      font-size: 16px;
-      color: #ccc;
-    }
-    .login-box input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 2px solid #00ffcc;
-      border-radius: 10px;
-      background: #121212;
-      color: white;
-      font-size: 16px;
-    }
-    .login-box button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 10px;
-      background: #00ffcc;
-      color: #000;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .login-box button:hover {
-      background: #00ddb3;
-    }
-    .contact {
-      margin-top: 20px;
-      color: #aaa;
-      font-size: 14px;
-    }
-    iframe {
-      width: 100%;
-      height: 100vh;
-      border: none;
-      display: none;
-    }
-    .flash {
-      animation: flashEffect 0.5s infinite alternate;
-    }
-    @keyframes flashEffect {
-      0% { filter: brightness(1); }
-      100% { filter: brightness(2); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>QUỐC THỊNH - Nơi gửi trọn niềm tin</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #ffffff, #e0e0e0);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+        .input-container input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            outline: none;
+        }
+        .input-container button {
+            padding: 12px;
+            font-size: 18px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .input-container button:hover {
+            background-color: #218838;
+        }
+        .flash-container {
+            display: none;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .box {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .red {
+            background-color: #dc3545;
+        }
+        .green {
+            background-color: #28a745;
+        }
+        .flash {
+            transform: scale(1.2);
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
+        }
+        footer {
+            text-align: center;
+            font-size: 16px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ccc;
+        }
+        footer span {
+            color: #ff0000;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
-<div class="login-box" id="loginBox">
-  <h1>QUỐC THỊNH</h1>
-  <p>Nơi gửi trọn niềm tin</p>
-  <input type="text" id="username" placeholder="Tên đăng nhập" required>
-  <input type="text" id="key" placeholder="Mã truy cập" required>
-  <button onclick="login()">Đăng nhập</button>
-  <div class="contact">@toolquocthinh</div>
+<div class="container">
+    <div class="input-container" id="input-section">
+        <input type="text" id="username" placeholder="Tên đăng nhập">
+        <input type="password" id="key" placeholder="Mã truy cập">
+        <input type="text" id="gameLink" placeholder="Link game bất kỳ">
+        <button onclick="enterGame()">Vào Tool</button>
+    </div>
+
+    <div class="flash-container" id="flash-section">
+        <div class="box red" id="red-box">Tài</div>
+        <div class="box green" id="green-box">Xỉu</div>
+    </div>
 </div>
 
-<iframe id="gameFrame"></iframe>
+<footer>Liên hệ hỗ trợ: <span>@toolquocthinh</span></footer>
 
 <script>
-  const validKey = "abc123"; // Key truy cập (sau này bạn cho lấy từ server hoặc tự đổi)
+    let flashActive = false;
+    let interval;
 
-  function login() {
-    const username = document.getElementById('username').value.trim();
-    const key = document.getElementById('key').value.trim();
+    function enterGame() {
+        const username = document.getElementById('username').value.trim();
+        const key = document.getElementById('key').value.trim();
+        const gameLink = document.getElementById('gameLink').value.trim();
 
-    if (username && key === validKey) {
-      const gameLink = prompt("Nhập link game:");
+        if (!username || !key || !gameLink) {
+            alert('Vui lòng điền đầy đủ thông tin!');
+            return;
+        }
 
-      if (gameLink) {
-        document.getElementById('loginBox').style.display = 'none';
-        const iframe = document.getElementById('gameFrame');
-        iframe.src = gameLink;
-        iframe.style.display = 'block';
-        setupFlashing();
-        applyRandomStyle();
-      } else {
-        alert("Bạn chưa nhập link game!");
-      }
-    } else {
-      alert("Tên đăng nhập hoặc mã truy cập sai!");
+        if (key !== '3102011') {
+            alert('Mã truy cập không đúng!');
+            return;
+        }
+
+        // Chuyển giao diện
+        document.getElementById('input-section').style.display = 'none';
+        document.getElementById('flash-section').style.display = 'flex';
+
+        // Bắt đầu nháy đèn
+        startFlashing();
     }
-  }
 
-  function setupFlashing() {
-    setInterval(() => {
-      const now = new Date();
-      const second = now.getSeconds();
-      const iframe = document.getElementById('gameFrame');
-      if (second >= 40 && second <= 45) {
-        iframe.classList.add('flash');
-      } else {
-        iframe.classList.remove('flash');
-      }
-    }, 1000);
-  }
+    function startFlashing() {
+        interval = setInterval(() => {
+            const now = new Date();
+            const seconds = now.getSeconds();
 
-  function applyRandomStyle() {
-    const styles = [
-      "border-radius: 0; box-shadow: none; background: #000;",
-      "border-radius: 20px; box-shadow: 0 0 20px red;",
-      "border-radius: 50px; box-shadow: 0 0 20px blue;",
-      "border-radius: 10px; box-shadow: 0 0 30px green;",
-      "border-radius: 5px; box-shadow: 0 0 40px purple;",
-    ];
-    const randomStyle = styles[Math.floor(Math.random() * styles.length)];
-    document.getElementById('gameFrame').style.cssText += randomStyle;
-  }
+            if (seconds >= 40 && seconds <= 46) { // nháy trong 7s
+                if (!flashActive) {
+                    flashActive = true;
+                    flash();
+                }
+            } else {
+                flashActive = false;
+                resetFlash();
+            }
+        }, 1000);
+    }
+
+    function flash() {
+        // Random tài hoặc xỉu nháy
+        const flashTài = Math.random() < 0.5;
+
+        if (flashTài) {
+            document.getElementById('red-box').classList.add('flash');
+            document.getElementById('green-box').classList.remove('flash');
+        } else {
+            document.getElementById('green-box').classList.add('flash');
+            document.getElementById('red-box').classList.remove('flash');
+        }
+    }
+
+    function resetFlash() {
+        document.getElementById('red-box').classList.remove('flash');
+        document.getElementById('green-box').classList.remove('flash');
+    }
 </script>
 
 </body>

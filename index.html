@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QUỐC THỊNH - Nơi gửi trọn niềm tin</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+    h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #222;
+    }
+    input {
+      width: 250px;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 270px;
+      padding: 10px;
+      background: #4CAF50;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #linkPage, #gamePage {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    iframe {
+      width: 100%;
+      height: 90vh;
+      border: none;
+    }
+    #flashBox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 5px;
+      text-align: center;
+      font-weight: bold;
+      color: white;
+      background: #333;
+      z-index: 999;
+    }
+    .flash {
+      background: red !important;
+      animation: flashAnim 0.5s alternate infinite;
+    }
+    @keyframes flashAnim {
+      from { background: red; }
+      to { background: yellow; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="loginPage">
+  <h1>QUỐC THỊNH - Nơi gửi trọn niềm tin</h1>
+  <input id="username" placeholder="Tên đăng nhập" required><br>
+  <input id="key" placeholder="Mã truy cập" required><br>
+  <button onclick="login()">Đăng nhập</button>
+</div>
+
+<div id="linkPage">
+  <h1>Nhập link game cần chơi</h1>
+  <input id="gameLink" placeholder="Dán link game..." required><br>
+  <button onclick="startGame()">Bắt đầu</button>
+</div>
+
+<div id="gamePage">
+  <div id="flashBox">Tool đang theo dõi phiên...</div>
+  <iframe id="gameFrame"></iframe>
+</div>
+
+<script>
+  const KEY_URL = "https://raw.githubusercontent.com/phanmemtoolqt/key-manager/main/keys.json";
+  let accountList = {};
+
+  function getDeviceId() {
+    let deviceId = localStorage.getItem("device_id");
+    if (!deviceId) {
+      deviceId = "device-" + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem("device_id", deviceId);
+    }
+    return deviceId;
+  }
+
+  async function login() {
+    const username = document.getElementById("username").value.trim();
+    const key = document.getElementById("key").value.trim();
+    const deviceId = getDeviceId();
+
+    try {
+      const res = await fetch(KEY_URL);
+      accountList = await res.json();
+    } catch (e) {
+      alert("Không thể tải danh sách key. Vui lòng thử lại sau!");
+      return;
+    }
+
+    const account = accountList[username];
+    if (!account || account.key !== key) {
+      alert("Sai tên đăng nhập hoặc mã truy cập!");
+      return;
+    }
+
+    if (account.device && account.device !== deviceId) {
+      alert("Tài khoản đã được sử dụng trên thiết bị khác!");
+      return;
+    }
+
+    if (!account.device) {
+      account.device = deviceId;
+    }
+
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("linkPage").style.display = "flex";
+  }
+
+  function startGame() {
+    const link = document.getElementById("gameLink").value.trim();
+    if (!link.startsWith("http")) {
+      alert("Link không hợp lệ! Phải bắt đầu bằng http hoặc https");
+      return;
+    }
+
+    document.getElementById("linkPage").style.display = "none";
+    document.getElementById("gamePage").style.display = "block";
+    document.getElementById("gameFrame").src = link;
+    startFlashTimer();
+  }
+
+  function startFlashTimer() {
+    setInterval(() => {
+      const now = new Date();
+      const second = now.getSeconds();
+      const flashBox = document.getElementById("flashBox");
+
+      if (second >= 40 && second < 46) {
+        flashBox.classList.add("flash");
+        flashBox.innerText = "Tool đang nháy (giây " + second + ")";
+      } else {
+        flashBox.classList.remove("flash");
+        flashBox.innerText = "Tool đang theo dõi phiên...";
+      }
+    }, 1000);
+  }
+</script>
+
+</body>
+</html>

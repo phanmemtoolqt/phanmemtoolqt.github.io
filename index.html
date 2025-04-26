@@ -74,7 +74,7 @@
   </div>
 
   <script>
-    const KEY_URL = "https://raw.githubusercontent.com/phanmemtoolqt/key-manager/main/keys.json";
+    const KEY_URL = "https://phanmemtoolqt.github.io/key-manager/keys.json";
     let accountList = {};
 
     function getDeviceId() {
@@ -92,7 +92,7 @@
       const deviceId = getDeviceId();
 
       try {
-        const res = await fetch(KEY_URL + "?v=" + Date.now()); // Bẻ cache
+        const res = await fetch(KEY_URL + "?v=" + Date.now()); // Chống cache
         accountList = await res.json();
       } catch (e) {
         alert("Không thể tải danh sách key.");

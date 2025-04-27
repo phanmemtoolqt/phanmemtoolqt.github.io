@@ -1,161 +1,185 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUỐC THỊNH - Nơi gửi trọn niềm tin</title>
-    <style>
-        body {
-            margin: 0;
-            background: #000;
-            font-family: Arial, sans-serif;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        #input-section, #flash-section {
-            background: #111;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px #0f0;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 90%;
-            max-width: 400px;
-        }
-        input {
-            padding: 10px;
-            border: 2px solid #0f0;
-            border-radius: 8px;
-            background: #000;
-            color: #0f0;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px;
-            background: #0f0;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        #flash-section {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-        #flash-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #333;
-            padding: 20px;
-            border-radius: 20px;
-            gap: 40px;
-            position: relative;
-        }
-        .side {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: grey;
-            transition: background 0.2s;
-        }
-        #dice {
-            width: 50px;
-        }
-        .title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #0f0;
-        }
-        .label {
-            text-align: center;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dự Đoán Tài Xỉu</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    .login-box, .game-box, .predict-box {
+      background: #111;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      position: relative;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 0 10px #00ff00;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #00ff00;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .hide {
+      display: none;
+    }
+    .top-right-buttons {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 5px;
+    }
+    .minimize, .close {
+      width: 25px;
+      height: 25px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .minimize {
+      background-color: orange;
+    }
+    .close {
+      background-color: red;
+    }
+    .game-link {
+      background-color: #0f0;
+      margin: 5px 0;
+      padding: 10px;
+      text-align: center;
+      border-radius: 5px;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .result-box {
+      margin-top: 10px;
+      background: #222;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .tele-contact {
+      margin-top: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+    .tele-contact a {
+      color: #00ff00;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
 </head>
+
 <body>
-
-<div id="input-section">
-    <div class="title">QUỐC THỊNH</div>
-    <div style="text-align:center; margin-bottom: 10px;">Nơi gửi trọn niềm tin</div>
-    <input id="username" placeholder="Tên đăng nhập" />
-    <input id="key" placeholder="Mã truy cập" />
-    <input id="gameLink" placeholder="Link game" />
-    <button onclick="enterGame()">Đăng nhập</button>
-    <div style="text-align:center; font-size: 14px; color: gray;">@toolquocthinh</div>
-</div>
-
-<div id="flash-section">
-    <div id="flash-box">
-        <div>
-            <div id="tai" class="side"></div>
-            <div class="label">Tài</div>
-        </div>
-        <img id="dice" src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Alea_1.png" />
-        <div>
-            <div id="xiu" class="side"></div>
-            <div class="label">Xỉu</div>
-        </div>
+  <div class="login-box" id="loginBox">
+    <h2>Nhập Key Đăng Nhập</h2>
+    <div class="input-group">
+      <input type="text" id="keyInput" placeholder="Nhập key...">
     </div>
-</div>
+    <button onclick="login()">Đăng Nhập</button>
+    <div class="tele-contact">
+      Chưa có key? <a href="https://t.me/toolquocthinh" target="_blank">@toolquocthinh</a>
+    </div>
+  </div>
+
+  <div class="game-box hide" id="gameBox">
+    <h2>Chọn Game</h2>
+    <div class="game-link" onclick="openGame('68gamebai')">68gamebai</div>
+    <div class="game-link" onclick="openGame('SumClub')">SumClub</div>
+    <div class="game-link" onclick="openGame('Laucua')">Laucua</div>
+    <div class="game-link" onclick="openGame('Xocdia88')">Xocdia88</div>
+    <div class="input-group">
+      <input type="text" id="customGame" placeholder="Hoặc nhập link game tại đây...">
+    </div>
+    <button onclick="customOpen()">Mở Game</button>
+  </div>
+
+  <div class="predict-box hide" id="predictBox">
+    <div class="top-right-buttons">
+      <button class="minimize" onclick="togglePredict()">-</button>
+      <button class="close" onclick="closePredict()">x</button>
+    </div>
+    <h2>Dự Đoán Tài Xỉu</h2>
+    <div class="input-group">
+      <label>Kết quả trước (T/X):</label>
+      <input type="text" id="resultInput" placeholder="txxxxx">
+    </div>
+    <div class="input-group">
+      <label>Số vốn (VND):</label>
+      <input type="number" id="moneyInput" placeholder="Nhập số vốn...">
+    </div>
+    <button onclick="predict()">Dự đoán</button>
+    <div class="result-box" id="resultBox"></div>
+  </div>
 
 <script>
-    let flashInterval;
+function login() {
+  const key = document.getElementById('keyInput').value;
+  const correctKey = '3102011'; // Key cố định
 
-    function enterGame() {
-        const username = document.getElementById('username').value.trim();
-        const key = document.getElementById('key').value.trim();
-        const gameLink = document.getElementById('gameLink').value.trim();
+  if (key.trim() === correctKey) {
+    document.getElementById('loginBox').classList.add('hide');
+    document.getElementById('gameBox').classList.remove('hide');
+  } else {
+    alert('Key sai! Liên hệ Admin để lấy key đúng.');
+  }
+}
 
-        if (!username || !key || !gameLink) {
-            alert('Vui lòng điền đầy đủ thông tin!');
-            return;
-        }
+function openGame(game) {
+  document.getElementById('gameBox').classList.add('hide');
+  document.getElementById('predictBox').classList.remove('hide');
+}
 
-        if (key !== '3102011') {
-            alert('Mã truy cập sai!');
-            return;
-        }
+function customOpen() {
+  const link = document.getElementById('customGame').value;
+  if (link.trim() !== '') {
+    openGame(link);
+  } else {
+    alert('Vui lòng nhập link game!');
+  }
+}
 
-        window.open(gameLink, '_blank'); // Mở link game riêng
-        document.getElementById('input-section').style.display = 'none';
-        document.getElementById('flash-section').style.display = 'flex';
+function predict() {
+  const result = document.getElementById('resultInput').value;
+  const money = document.getElementById('moneyInput').value;
+  if (result && money) {
+    const percent = Math.floor(Math.random() * 41) + 50; // Random 50% - 90%
+    const bet = Math.floor(money * 0.1);
+    document.getElementById('resultBox').innerHTML = `
+      <p><b>Kết quả:</b> TÀI (${percent}%)</p>
+      <p><b>Loại cầu:</b> Xu hướng ngược - Xỉu nhiều, khả năng Tài cao</p>
+      <p><b>Đặt cược:</b> ${bet.toLocaleString()} VND (cầu chưa rõ, đặt nhẹ)</p>
+    `;
+  } else {
+    alert('Vui lòng điền đầy đủ thông tin!');
+  }
+}
 
-        startFlashing();
-    }
-
-    function startFlashing() {
-        flashInterval = setInterval(() => {
-            const now = new Date();
-            const seconds = now.getSeconds();
-
-            if (seconds >= 40 && seconds <= 47) {
-                // Random chọn nháy bên nào
-                const randomSide = Math.random() > 0.5 ? 'tai' : 'xiu';
-                if (randomSide === 'tai') {
-                    document.getElementById('tai').style.background = 'lime';
-                    document.getElementById('xiu').style.background = 'grey';
-                } else {
-                    document.getElementById('xiu').style.background = 'red';
-                    document.getElementById('tai').style.background = 'grey';
-                }
-            } else {
-                // Ngoài thời gian nháy thì về màu xám
-                document.getElementById('tai').style.background = 'grey';
-                document.getElementById('xiu').style.background = 'grey';
-            }
-        }, 500); // kiểm tra mỗi 0.5s cho nhạy
-    }
-</script>
-
-</body>
-</html>
+function togglePredict() {
+  const box = document.getElementById('predictBox');
+  if (box.style.height === '40px') {
+    box.style.height = '';
+    box.que

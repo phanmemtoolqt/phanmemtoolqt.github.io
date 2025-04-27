@@ -80,71 +80,69 @@
       padding: 10px;
       border-radius: 5px;
     }
-    .tele-contact {
+    .contact-admin {
       margin-top: 10px;
-      font-size: 14px;
       text-align: center;
     }
-    .tele-contact a {
-      color: #00ff00;
-      text-decoration: none;
-      font-weight: bold;
+    .contact-admin a {
+      color: #00f;
+      text-decoration: underline;
     }
   </style>
 </head>
-
 <body>
-  <div class="login-box" id="loginBox">
-    <h2>Nhập Key Đăng Nhập</h2>
-    <div class="input-group">
-      <input type="text" id="keyInput" placeholder="Nhập key...">
-    </div>
-    <button onclick="login()">Đăng Nhập</button>
-    <div class="tele-contact">
-      Chưa có key? <a href="https://t.me/toolquocthinh" target="_blank">@toolquocthinh</a>
-    </div>
-  </div>
 
-  <div class="game-box hide" id="gameBox">
-    <h2>Chọn Game</h2>
-    <div class="game-link" onclick="openGame('68gamebai')">68gamebai</div>
-    <div class="game-link" onclick="openGame('SumClub')">SumClub</div>
-    <div class="game-link" onclick="openGame('Laucua')">Laucua</div>
-    <div class="game-link" onclick="openGame('Xocdia88')">Xocdia88</div>
-    <div class="input-group">
-      <input type="text" id="customGame" placeholder="Hoặc nhập link game tại đây...">
-    </div>
-    <button onclick="customOpen()">Mở Game</button>
+<div class="login-box" id="loginBox">
+  <h2>ẠP Key Đăng Nhập</h2>
+  <div class="input-group">
+    <input type="text" id="keyInput" placeholder="Nhập key...">
   </div>
+  <button onclick="login()">Đăng Nhập</button>
+  <div class="contact-admin">
+    Liên hệ admin lấy key: <a href="https://t.me/toolquocthinh" target="_blank">@toolquocthinh</a>
+  </div>
+</div>
 
-  <div class="predict-box hide" id="predictBox">
-    <div class="top-right-buttons">
-      <button class="minimize" onclick="togglePredict()">-</button>
-      <button class="close" onclick="closePredict()">x</button>
-    </div>
-    <h2>Dự Đoán Tài Xỉu</h2>
-    <div class="input-group">
-      <label>Kết quả trước (T/X):</label>
-      <input type="text" id="resultInput" placeholder="txxxxx">
-    </div>
-    <div class="input-group">
-      <label>Số vốn (VND):</label>
-      <input type="number" id="moneyInput" placeholder="Nhập số vốn...">
-    </div>
-    <button onclick="predict()">Dự đoán</button>
-    <div class="result-box" id="resultBox"></div>
+<div class="game-box hide" id="gameBox">
+  <h2>Chọn Game</h2>
+  <div class="game-link" onclick="openGame('68gamebai')">68gamebai</div>
+  <div class="game-link" onclick="openGame('SumClub')">SumClub</div>
+  <div class="game-link" onclick="openGame('Laucua')">Laucua</div>
+  <div class="game-link" onclick="openGame('Xocdia88')">Xocdia88</div>
+  <div class="input-group">
+    <input type="text" id="customGame" placeholder="Hoặc nhập link game tại đây...">
   </div>
+  <button onclick="customOpen()">Ảnh Mở Game</button>
+</div>
+
+<div class="predict-box hide" id="predictBox">
+  <div class="top-right-buttons">
+    <button class="minimize" onclick="togglePredict()">-</button>
+    <button class="close" onclick="closePredict()">x</button>
+  </div>
+  <h2>Dự Đoán Tài Xỉu</h2>
+  <div class="input-group">
+    <label>Kết quả trước (T/X):</label>
+    <input type="text" id="resultInput" placeholder="txxxxx">
+  </div>
+  <div class="input-group">
+    <label>Số vốn (VND):</label>
+    <input type="number" id="moneyInput" placeholder="Nhập số vốn...">
+  </div>
+  <button onclick="predict()">Dự Đoán</button>
+  <div class="result-box" id="resultBox"></div>
+</div>
 
 <script>
-function login() {
-  const key = document.getElementById('keyInput').value;
-  const correctKey = '3102011'; // Key cố định
+const KEY = "3102011"; // Key cố định
 
-  if (key.trim() === correctKey) {
+function login() {
+  const key = document.getElementById('keyInput').value.trim();
+  if (key === KEY) {
     document.getElementById('loginBox').classList.add('hide');
     document.getElementById('gameBox').classList.remove('hide');
   } else {
-    alert('Key sai! Liên hệ Admin để lấy key đúng.');
+    alert('Key không đúng. Liên hệ @toolquocthinh để nhận key!');
   }
 }
 
@@ -166,12 +164,12 @@ function predict() {
   const result = document.getElementById('resultInput').value;
   const money = document.getElementById('moneyInput').value;
   if (result && money) {
-    const percent = Math.floor(Math.random() * 41) + 50; // Random 50% - 90%
+    const percent = Math.floor(Math.random() * 41) + 50; // Random 50%-90%
     const bet = Math.floor(money * 0.1);
     document.getElementById('resultBox').innerHTML = `
       <p><b>Kết quả:</b> TÀI (${percent}%)</p>
-      <p><b>Loại cầu:</b> Xu hướng ngược - Xỉu nhiều, khả năng Tài cao</p>
-      <p><b>Đặt cược:</b> ${bet.toLocaleString()} VND (cầu chưa rõ, đặt nhẹ)</p>
+      <p><b>Loại cầu:</b> Xu hướng ngược - Xu hướng Xỉu nhiều, khả năng Tài cao</p>
+      <p><b>Đặt cược:</b> ${bet.toLocaleString()} VND</p>
     `;
   } else {
     alert('Vui lòng điền đầy đủ thông tin!');
@@ -182,4 +180,19 @@ function togglePredict() {
   const box = document.getElementById('predictBox');
   if (box.style.height === '40px') {
     box.style.height = '';
-    box.que
+    box.querySelector('h2').style.display = 'block';
+    box.querySelectorAll('.input-group, button, .result-box').forEach(el => el.style.display = 'block');
+  } else {
+    box.style.height = '40px';
+    box.querySelector('h2').style.display = 'none';
+    box.querySelectorAll('.input-group, button, .result-box').forEach(el => el.style.display = 'none');
+  }
+}
+
+function closePredict() {
+  document.getElementById('predictBox').classList.add('hide');
+}
+</script>
+
+</body>
+</html>

@@ -1,197 +1,225 @@
+
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dự Đoán Tài Xỉu</title>
-  <style>
-    body {
-      background-color: #000;
-      color: white;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      overflow-x: hidden;
-    }
-    .login-box, .game-box, .predict-box {
-      background: #111;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      position: relative;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 0 10px #00ff00;
-    }
-    .input-group {
-      margin-bottom: 15px;
-    }
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: none;
-      border-radius: 5px;
-    }
-    button {
-      background-color: #00ff00;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .hide {
-      display: none;
-    }
-    .top-right-buttons {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      display: flex;
-      gap: 5px;
-    }
-    .minimize, .close {
-      width: 25px;
-      height: 25px;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .minimize {
-      background-color: orange;
-    }
-    .close {
-      background-color: red;
-    }
-    .game-link {
-      background-color: #0f0;
-      margin: 5px 0;
-      padding: 10px;
-      text-align: center;
-      border-radius: 5px;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .result-box {
-      margin-top: 10px;
-      background: #222;
-      padding: 10px;
-      border-radius: 5px;
-    }
-    .contact-admin {
-      margin-top: 10px;
-      text-align: center;
-    }
-    .contact-admin a {
-      color: #00f;
-      text-decoration: underline;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑Tool nháy đèn by văn hoa🎲</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ff0000;
+        }
+
+        .input-container {
+            margin: 20px 0;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            border: 2px solid #444;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #ff0000;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #cc0000;
+        }
+
+        .key-input {
+            display: none;
+        }
+
+        .history {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .history p {
+            background-color: #333;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .result {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .circle.red {
+            background-color: #ff0000;
+        }
+
+        .circle.blue {
+            background-color: #0066cc;
+        }
+
+        .circle.fire {
+            animation: fire 1s infinite;
+        }
+
+        @keyframes fire {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="login-box" id="loginBox">
-  <h2>ẠP Key Đăng Nhập</h2>
-  <div class="input-group">
-    <input type="text" id="keyInput" placeholder="Nhập key...">
-  </div>
-  <button onclick="login()">Đăng Nhập</button>
-  <div class="contact-admin">
-    Liên hệ admin lấy key: <a href="https://t.me/toolquocthinh" target="_blank">@toolquocthinh</a>
-  </div>
-</div>
+<div class="container">
+    <h1>👑Tool nháy đèn văn hoa🎲</h1>
 
-<div class="game-box hide" id="gameBox">
-  <h2>Chọn Game</h2>
-  <div class="game-link" onclick="openGame('68gamebai')">68gamebai</div>
-  <div class="game-link" onclick="openGame('SumClub')">SumClub</div>
-  <div class="game-link" onclick="openGame('Laucua')">Laucua</div>
-  <div class="game-link" onclick="openGame('Xocdia88')">Xocdia88</div>
-  <div class="input-group">
-    <input type="text" id="customGame" placeholder="Hoặc nhập link game tại đây...">
-  </div>
-  <button onclick="customOpen()">Ảnh Mở Game</button>
-</div>
+    <!-- Key input -->
+    <div class="input-container">
+        <input type="text" id="keyInput" placeholder="Nhập key tool: vanhoa2008" />
+        <button onclick="validateKey()">Nhập Key</button>
+    </div>
 
-<div class="predict-box hide" id="predictBox">
-  <div class="top-right-buttons">
-    <button class="minimize" onclick="togglePredict()">-</button>
-    <button class="close" onclick="closePredict()">x</button>
-  </div>
-  <h2>Dự Đoán Tài Xỉu</h2>
-  <div class="input-group">
-    <label>Kết quả trước (T/X):</label>
-    <input type="text" id="resultInput" placeholder="txxxxx">
-  </div>
-  <div class="input-group">
-    <label>Số vốn (VND):</label>
-    <input type="number" id="moneyInput" placeholder="Nhập số vốn...">
-  </div>
-  <button onclick="predict()">Dự Đoán</button>
-  <div class="result-box" id="resultBox"></div>
+    <!-- Version control -->
+    <div class="input-container">
+        <input type="text" id="versionInput" placeholder="Nhập mã phiên" />
+        <button onclick="incrementVersion()">+</button>
+        <button onclick="decrementVersion()">-</button>
+    </div>
+
+    <!-- User input for results -->
+    <div class="input-container">
+        <input type="text" id="sequenceInput" placeholder="Nhập chuỗi phiên (t/x)" />
+        <button onclick="predictResult()" id="predictButton">Dự đoán</button>
+        <button onclick="clearHistory()">Xóa chuỗi/phiên</button>
+    </div>
+
+    <!-- Prediction results -->
+    <div class="result">
+        <div class="circle" id="resultTai">🔥Tài</div>
+        <div class="circle" id="resultXiu">❄️Xỉu</div>
+    </div>
+
+    <!-- History section -->
+    <div class="history" id="historyContainer">
+        <h2>Lịch sử dự đoán:</h2>
+        <!-- History will be dynamically added here -->
+    </div>
 </div>
 
 <script>
-const KEY = "3102011"; // Key cố định
+    let keyEntered = false;
+    let history = [];
+    let resultDisplayed = false;
+    let timeoutId;
 
-function login() {
-  const key = document.getElementById('keyInput').value.trim();
-  if (key === KEY) {
-    document.getElementById('loginBox').classList.add('hide');
-    document.getElementById('gameBox').classList.remove('hide');
-  } else {
-    alert('Key không đúng. Liên hệ @toolquocthinh để nhận key!');
-  }
-}
+    function validateKey() {
+        const key = document.getElementById('keyInput').value;
+        if (key === 'tooltxbaoang') {
+            keyEntered = true;
+            alert("Key hợp lệ, tiếp tục sử dụng tool.");
+            document.getElementById('keyInput').style.display = 'none';
+        } else {
+            alert("Key không hợp lệ. Vui lòng nhập lại.");
+        }
+    }
 
-function openGame(game) {
-  document.getElementById('gameBox').classList.add('hide');
-  document.getElementById('predictBox').classList.remove('hide');
-}
+    function incrementVersion() {
+        let version = document.getElementById('versionInput').value;
+        if (version) {
+            version = parseInt(version) + 1;
+            document.getElementById('versionInput').value = version;
+        }
+    }
 
-function customOpen() {
-  const link = document.getElementById('customGame').value;
-  if (link.trim() !== '') {
-    openGame(link);
-  } else {
-    alert('Vui lòng nhập link game!');
-  }
-}
+    function decrementVersion() {
+        let version = document.getElementById('versionInput').value;
+        if (version) {
+            version = parseInt(version) - 1;
+            document.getElementById('versionInput').value = version;
+        }
+    }
 
-function predict() {
-  const result = document.getElementById('resultInput').value;
-  const money = document.getElementById('moneyInput').value;
-  if (result && money) {
-    const percent = Math.floor(Math.random() * 41) + 50; // Random 50%-90%
-    const bet = Math.floor(money * 0.1);
-    document.getElementById('resultBox').innerHTML = `
-      <p><b>Kết quả:</b> TÀI (${percent}%)</p>
-      <p><b>Loại cầu:</b> Xu hướng ngược - Xu hướng Xỉu nhiều, khả năng Tài cao</p>
-      <p><b>Đặt cược:</b> ${bet.toLocaleString()} VND</p>
-    `;
-  } else {
-    alert('Vui lòng điền đầy đủ thông tin!');
-  }
-}
+    function predictResult() {
+        if (!keyEntered) {
+            alert("Vui lòng nhập key để sử dụng tool.");
+            return;
+        }
 
-function togglePredict() {
-  const box = document.getElementById('predictBox');
-  if (box.style.height === '40px') {
-    box.style.height = '';
-    box.querySelector('h2').style.display = 'block';
-    box.querySelectorAll('.input-group, button, .result-box').forEach(el => el.style.display = 'block');
-  } else {
-    box.style.height = '40px';
-    box.querySelector('h2').style.display = 'none';
-    box.querySelectorAll('.input-group, button, .result-box').forEach(el => el.style.display = 'none');
-  }
-}
+        const sequence = document.getElementById('sequenceInput').value;
+        if (sequence === '') {
+            alert("Vui lòng nhập chuỗi phiên.");
+            return;
+        }
 
-function closePredict() {
-  document.getElementById('predictBox').classList.add('hide');
-}
+        if (resultDisplayed) return;
+
+        resultDisplayed = true;
+        const predictButton = document.getElementById('predictButton');
+        predictButton.disabled = true;
+
+        const randomResult = Math.random() < 0.5 ? 'Tài' : 'Xỉu';
+        const resultElement = randomResult === 'Tài' ? document.getElementById('resultTai') : document.getElementById('resultXiu');
+        resultElement.classList.add('fire');
+
+        timeoutId = setTimeout(() => {
+            resultElement.classList.remove('fire');
+            resultDisplayed = false;
+            predictButton.disabled = false;
+        }, 10000);
+
+        const currentTime = new Date().toLocaleTimeString();
+        const historyItem = `Phiên: ${document.getElementById('versionInput').value} - Chuỗi: ${sequence} - Kết quả: ${randomResult === 'Tài' ? '🔴Tài' : '🔵Xỉu'} - Thời gian: ${currentTime}`;
+        history.push(historyItem);
+        updateHistory();
+    }
+
+    function clearHistory() {
+        document.getElementById('sequenceInput').value = '';
+        history = [];
+        updateHistory();
+    }
+
+    function updateHistory() {
+        const historyContainer = document.getElementById('historyContainer');
+        historyContainer.innerHTML = '<h2>Lịch sử dự đoán:</h2>';
+        history.forEach(item => {
+            const historyElement = document.createElement('p');
+            historyElement.textContent = item;
+            historyContainer.appendChild(historyElement);
+        });
+    }
 </script>
 
 </body>

@@ -1,226 +1,216 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👑Tool nháy đèn by văn hoa🎲</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            text-align: center;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tool nháy đèn Văn Hoa</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(145deg, #0f0f0f, #1b1b1b);
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #1e1e1e;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+      text-align: center;
+    }
 
-        h1 {
-            color: #ff0000;
-        }
+    h1 {
+      color: #ff3c3c;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
 
-        .input-container {
-            margin: 20px 0;
-        }
+    input, button {
+      padding: 12px;
+      width: 90%;
+      margin: 10px auto;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      background-color: #2a2a2a;
+      color: white;
+      display: block;
+      transition: 0.3s;
+    }
 
-        input, button {
-            padding: 10px;
-            margin: 10px;
-            border: 2px solid #444;
-            border-radius: 5px;
-            background-color: #222;
-            color: white;
-        }
+    input::placeholder {
+      color: #888;
+    }
 
-        button {
-            cursor: pointer;
-            background-color: #ff0000;
-            border: none;
-        }
+    button {
+      background: #ff3c3c;
+      font-weight: bold;
+    }
 
-        button:hover {
-            background-color: #cc0000;
-        }
+    button:hover {
+      background: #e00000;
+      transform: scale(1.03);
+    }
 
-        .key-input {
-            display: none;
-        }
+    .result {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
 
-        .history {
-            margin-top: 20px;
-            text-align: left;
-        }
+    .circle {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      transition: 0.5s;
+    }
 
-        .history p {
-            background-color: #333;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
+    .tai {
+      border: 3px solid #ff6f61;
+      background: #331111;
+      color: #ff6f61;
+    }
 
-        .result {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
+    .xiu {
+      border: 3px solid #33c0ff;
+      background: #112233;
+      color: #33c0ff;
+    }
 
-        .circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 2px solid #fff;
-            margin: 0 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-        }
+    .fire {
+      animation: flicker 1s infinite alternate;
+    }
 
-        .circle.red {
-            background-color: #ff0000;
-        }
+    @keyframes flicker {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
 
-        .circle.blue {
-            background-color: #0066cc;
-        }
+    .history {
+      text-align: left;
+      margin-top: 30px;
+    }
 
-        .circle.fire {
-            animation: fire 1s infinite;
-        }
+    .history h2 {
+      font-size: 18px;
+      color: #ccc;
+    }
 
-        @keyframes fire {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-    </style>
+    .history p {
+      background: #2a2a2a;
+      padding: 8px;
+      border-radius: 6px;
+      margin: 5px 0;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>👑Tool nháy đèn Văn Hoa🎲</h1>
+    <input type="text" id="keyInput" placeholder="Nhập key tool: vanhoa2008" />
+    <button onclick="validateKey()">Nhập Key</button>
 
-<div class="container">
-    <h1>👑Tool nháy đèn văn hoa🎲</h1>
-
-    <!-- Key input -->
-    <div class="input-container">
-        <input type="text" id="keyInput" placeholder="Nhập key tool: vanhoa2008" />
-        <button onclick="validateKey()">Nhập Key</button>
+    <input type="text" id="versionInput" placeholder="Nhập mã phiên" />
+    <div style="display:flex; justify-content: space-between;">
+      <button onclick="incrementVersion()">Tăng +</button>
+      <button onclick="decrementVersion()">Giảm -</button>
     </div>
 
-    <!-- Version control -->
-    <div class="input-container">
-        <input type="text" id="versionInput" placeholder="Nhập mã phiên" />
-        <button onclick="incrementVersion()">+</button>
-        <button onclick="decrementVersion()">-</button>
-    </div>
+    <input type="text" id="sequenceInput" placeholder="Nhập chuỗi phiên (t/x)" />
+    <button onclick="predictResult()" id="predictButton">Dự đoán</button>
+    <button onclick="clearHistory()">Xóa chuỗi/phiên</button>
 
-    <!-- User input for results -->
-    <div class="input-container">
-        <input type="text" id="sequenceInput" placeholder="Nhập chuỗi phiên (t/x)" />
-        <button onclick="predictResult()" id="predictButton">Dự đoán</button>
-        <button onclick="clearHistory()">Xóa chuỗi/phiên</button>
-    </div>
-
-    <!-- Prediction results -->
     <div class="result">
-        <div class="circle" id="resultTai">🔥Tài</div>
-        <div class="circle" id="resultXiu">❄️Xỉu</div>
+      <div class="circle tai" id="resultTai">🔥 Tài</div>
+      <div class="circle xiu" id="resultXiu">❄️ Xỉu</div>
     </div>
 
-    <!-- History section -->
     <div class="history" id="historyContainer">
-        <h2>Lịch sử dự đoán:</h2>
-        <!-- History will be dynamically added here -->
+      <h2>Lịch sử dự đoán:</h2>
     </div>
-</div>
+  </div>
 
-<script>
+  <script>
     let keyEntered = false;
     let history = [];
     let resultDisplayed = false;
-    let timeoutId;
 
     function validateKey() {
-        const key = document.getElementById('keyInput').value;
-        if (key === 'tooltxbaoang') {
-            keyEntered = true;
-            alert("Key hợp lệ, tiếp tục sử dụng tool.");
-            document.getElementById('keyInput').style.display = 'none';
-        } else {
-            alert("Key không hợp lệ. Vui lòng nhập lại.");
-        }
+      const key = document.getElementById('keyInput').value;
+      if (key.toLowerCase() === 'vanhoa2008') {
+        keyEntered = true;
+        alert("Key hợp lệ! Bạn có thể sử dụng tool.");
+        document.getElementById('keyInput').style.display = 'none';
+      } else {
+        alert("Key sai, vui lòng thử lại.");
+      }
     }
 
     function incrementVersion() {
-        let version = document.getElementById('versionInput').value;
-        if (version) {
-            version = parseInt(version) + 1;
-            document.getElementById('versionInput').value = version;
-        }
+      let version = document.getElementById('versionInput').value;
+      document.getElementById('versionInput').value = parseInt(version || 0) + 1;
     }
 
     function decrementVersion() {
-        let version = document.getElementById('versionInput').value;
-        if (version) {
-            version = parseInt(version) - 1;
-            document.getElementById('versionInput').value = version;
-        }
+      let version = document.getElementById('versionInput').value;
+      document.getElementById('versionInput').value = Math.max(0, parseInt(version || 0) - 1);
     }
 
     function predictResult() {
-        if (!keyEntered) {
-            alert("Vui lòng nhập key để sử dụng tool.");
-            return;
-        }
+      if (!keyEntered) {
+        alert("Bạn cần nhập key để tiếp tục.");
+        return;
+      }
 
-        const sequence = document.getElementById('sequenceInput').value;
-        if (sequence === '') {
-            alert("Vui lòng nhập chuỗi phiên.");
-            return;
-        }
+      const sequence = document.getElementById('sequenceInput').value;
+      if (!sequence.trim()) {
+        alert("Vui lòng nhập chuỗi phiên.");
+        return;
+      }
 
-        if (resultDisplayed) return;
+      if (resultDisplayed) return;
 
-        resultDisplayed = true;
-        const predictButton = document.getElementById('predictButton');
-        predictButton.disabled = true;
+      resultDisplayed = true;
+      const result = Math.random() < 0.5 ? 'Tài' : 'Xỉu';
+      const resultElement = result === 'Tài' ? document.getElementById('resultTai') : document.getElementById('resultXiu');
+      resultElement.classList.add('fire');
 
-        const randomResult = Math.random() < 0.5 ? 'Tài' : 'Xỉu';
-        const resultElement = randomResult === 'Tài' ? document.getElementById('resultTai') : document.getElementById('resultXiu');
-        resultElement.classList.add('fire');
+      setTimeout(() => {
+        resultElement.classList.remove('fire');
+        resultDisplayed = false;
+      }, 8000);
 
-        timeoutId = setTimeout(() => {
-            resultElement.classList.remove('fire');
-            resultDisplayed = false;
-            predictButton.disabled = false;
-        }, 10000);
-
-        const currentTime = new Date().toLocaleTimeString();
-        const historyItem = `Phiên: ${document.getElementById('versionInput').value} - Chuỗi: ${sequence} - Kết quả: ${randomResult === 'Tài' ? '🔴Tài' : '🔵Xỉu'} - Thời gian: ${currentTime}`;
-        history.push(historyItem);
-        updateHistory();
+      const time = new Date().toLocaleTimeString();
+      const version = document.getElementById('versionInput').value;
+      history.push(`Phiên ${version} - Chuỗi: ${sequence} - KQ: ${result} - Lúc: ${time}`);
+      updateHistory();
     }
 
     function clearHistory() {
-        document.getElementById('sequenceInput').value = '';
-        history = [];
-        updateHistory();
+      document.getElementById('sequenceInput').value = '';
+      history = [];
+      updateHistory();
     }
 
     function updateHistory() {
-        const historyContainer = document.getElementById('historyContainer');
-        historyContainer.innerHTML = '<h2>Lịch sử dự đoán:</h2>';
-        history.forEach(item => {
-            const historyElement = document.createElement('p');
-            historyElement.textContent = item;
-            historyContainer.appendChild(historyElement);
-        });
+      const container = document.getElementById('historyContainer');
+      container.innerHTML = '<h2>Lịch sử dự đoán:</h2>';
+      history.forEach(item => {
+        const p = document.createElement('p');
+        p.textContent = item;
+        container.appendChild(p);
+      });
     }
-</script>
-
+  </script>
 </body>
 </html>
